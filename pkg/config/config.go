@@ -9,4 +9,10 @@ type ServiceConfig struct {
 	Port   int
 	Url    string
 	Method string
+	Tests  []Test
+}
+
+type Test struct {
+	Name   string
+	Status int
 }

@@ -29,6 +29,7 @@ func main() {
 	}
 
 	log.Printf("Cassini Config\n ---------\n %s\n ---------\n Port: %d\n URL: %s\n Method: %s\n", config.Service.Name, config.Service.Port, config.Service.Url, config.Service.Method)
+	log.Println("Tests:", config.Service.Tests)
 
 	client := http.Client{}
 
@@ -43,6 +44,16 @@ func main() {
 	}
 
 	defer resp.Body.Close()
+
+	tests := config.Service.Tests
+
+	for _, test := range tests {
+		if resp.StatusCode != test.Status {
+			log.Printf("\n%s failed. expected response status %d but got %d", test.Name, test.Status, resp.StatusCode)
+		} else {
+			log.Printf("\nPASS: %s\nStatus Expected: %d\nStatus Received: %d", test.Name, test.Status, resp.StatusCode)
+		}
+	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
