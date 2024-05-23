@@ -47,6 +47,8 @@ func main() {
 
 	tests := config.Service.Tests
 
+	// TODO: We need to loop through the tests and make requests for each one, lets not stop if one fails
+	// TODO: We can also change the yaml file to hold the method in each test aswell
 	for _, test := range tests {
 		if resp.StatusCode != test.Status {
 			log.Printf("\n%s failed. expected response status %d but got %d", test.Name, test.Status, resp.StatusCode)
