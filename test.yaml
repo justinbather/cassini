@@ -1,5 +1,5 @@
-server:
+service:
+  name: "test service"
   port: 8000
-  url: "testurl.com/"
+  url: "http://localhost:8000/"
   method: "GET"
-

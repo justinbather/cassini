@@ -1,10 +1,11 @@
 package config
 
 type CassiniConfig struct {
-	Server ServerConf
+	Service ServiceConfig
 }
 
-type ServerConf struct {
+type ServiceConfig struct {
+	Name   string
 	Port   int
 	Url    string
 	Method string

@@ -1,17 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"io"
 	"log"
+	"net/http"
 
-	"github.com/justinbather/cassini/pkg/types"
-
+	c "github.com/justinbather/cassini/pkg/config"
 	"github.com/spf13/viper"
 )
 
 func main() {
 
-	fmt.Println("Cassini")
+	log.Println("Cassini")
 
 	viper.SetConfigFile("./test.yaml")
 	viper.SetConfigType("yaml")
@@ -21,14 +21,33 @@ func main() {
 		panic(err)
 	}
 
-	var config types.CassiniConfig
+	var config c.CassiniConfig
 
 	err = viper.Unmarshal(&config)
 	if err != nil {
 		panic(err)
 	}
 
-	log.Println(config)
+	log.Printf("Cassini Config\n ---------\n %s\n ---------\n Port: %d\n URL: %s\n Method: %s\n", config.Service.Name, config.Service.Port, config.Service.Url, config.Service.Method)
 
-	fmt.Printf("Cassini Config\n Port: %d\n URL: %s\n Method: %s\n", config.Server.Port, config.Server.Url, config.Server.Method)
+	client := http.Client{}
+
+	req, err := http.NewRequest(config.Service.Method, config.Service.Url, nil)
+	if err != nil {
+		log.Print(err)
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Print(err)
+	}
+
+	log.Print(string(body))
 }
