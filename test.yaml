@@ -2,6 +2,8 @@ service:
   name: "test service"
   port: 8000
   url: "http://localhost:8000/"
+  intervalUnit: ""
+  intervalAmount: 5
   tests:
     - name: "test1"
       status: 200
