@@ -5,14 +5,14 @@ type CassiniConfig struct {
 }
 
 type ServiceConfig struct {
-	Name   string
-	Port   int
-	Url    string
-	Method string
-	Tests  []Test
+	Name  string
+	Port  int
+	Url   string
+	Tests []Test
 }
 
 type Test struct {
 	Name   string
+	Method string
 	Status int
 }

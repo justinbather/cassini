@@ -28,39 +28,39 @@ func main() {
 		panic(err)
 	}
 
-	log.Printf("Cassini Config\n ---------\n %s\n ---------\n Port: %d\n URL: %s\n Method: %s\n", config.Service.Name, config.Service.Port, config.Service.Url, config.Service.Method)
+	log.Printf("Cassini Config\n ---------\n %s\n ---------\n Port: %d\n URL: %s\n", config.Service.Name, config.Service.Port, config.Service.Url)
 	log.Println("Tests:", config.Service.Tests)
 
 	client := http.Client{}
-
-	req, err := http.NewRequest(config.Service.Method, config.Service.Url, nil)
-	if err != nil {
-		log.Print(err)
-	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Print(err)
-	}
-
-	defer resp.Body.Close()
 
 	tests := config.Service.Tests
 
 	// TODO: We need to loop through the tests and make requests for each one, lets not stop if one fails
 	// TODO: We can also change the yaml file to hold the method in each test aswell
 	for _, test := range tests {
+		req, err := http.NewRequest(test.Method, config.Service.Url, nil)
+		if err != nil {
+			log.Print(err)
+		}
+
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Print(err)
+		}
+
+		defer resp.Body.Close()
+
 		if resp.StatusCode != test.Status {
 			log.Printf("\n%s failed. expected response status %d but got %d", test.Name, test.Status, resp.StatusCode)
 		} else {
 			log.Printf("\nPASS: %s\nStatus Expected: %d\nStatus Received: %d", test.Name, test.Status, resp.StatusCode)
 		}
-	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Print(err)
-	}
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Print(err)
+		}
 
-	log.Print(string(body))
+		log.Print(string(body))
+	}
 }
