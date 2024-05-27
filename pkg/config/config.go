@@ -6,7 +6,6 @@ type CassiniConfig struct {
 
 type ServiceConfig struct {
 	Name           string
-	Port           int
 	Url            string
 	IntervalUnit   string
 	IntervalAmount int
@@ -14,7 +13,7 @@ type ServiceConfig struct {
 }
 
 type Test struct {
-	Name   string
-	Method string
-	Status int
+	Name         string
+	Method       string
+	AssertStatus int
 }

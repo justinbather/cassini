@@ -34,10 +34,10 @@ func Run(exit chan bool, ticker time.Ticker, config config.CassiniConfig) {
 
 				defer resp.Body.Close()
 
-				if resp.StatusCode != test.Status {
-					log.Printf("\n%s failed. expected response status %d but got %d", test.Name, test.Status, resp.StatusCode)
+				if resp.StatusCode != test.AssertStatus {
+					log.Printf("\n%s failed. expected response status %d but got %d", test.Name, test.AssertStatus, resp.StatusCode)
 				} else {
-					log.Printf("\nPASS: %s\nStatus Expected: %d\nStatus Received: %d", test.Name, test.Status, resp.StatusCode)
+					log.Printf("\nPASS: %s\nStatus Expected: %d\nStatus Received: %d", test.Name, test.AssertStatus, resp.StatusCode)
 				}
 
 				body, err := io.ReadAll(resp.Body)

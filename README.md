@@ -1,24 +1,40 @@
 # Cassini
-An HTTP probe built for sanity checking production REST endpoints post-deployment
-
-
-# thinking out loud
-- It would be nice if a user could easily specify through some sort of config file:
-  - What endpoint to hit
-  - What method
-  - The data
-  - And how often
-  - They should also be able to have assertions in the responses that if failed, can throw an alert
-
-- Cassini can be deployed as a long running service in a k8s cluster or something similar
-- We can create a docker image so that a user could create their own image with their config in it to be deployed 
-
+An HTTP probe built for sanity checking production REST endpoints post-deployment 
 
 ### MVP
 - Takes in a config file and makes a get request to some dummy server, and makes assertions based on the responses
 
 ### Usage
 ```bash
+# Run dummy server (runs on :8000)
+cd server && go run dummyServer.go
+
+#Build
+make
+
+# Run cassini
 ./cassini path/to/config
 ```
 
+### Config Options
+We use a .yaml file for configuration
+
+For now we can only assert status codes
+
+```yaml
+# Declares a Cassini Service
+service:
+  name: "test service"
+  url: "http://localhost:8000/"
+  intervalUnit: "second" # Options: second, hour, minute
+  intervalAmount: 5
+  tests:
+    - name: "test1"
+      assertStatus: 200 # this is what gets asserted when we run our scheduled tests in the service
+      method: "GET"
+    - name: "testing post req"
+      assertStatus: 201
+      method: "POST"
+```
+
+Based on the above config we are targeting localhost:8000 every 5 seconds with 2 tests

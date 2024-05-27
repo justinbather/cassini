@@ -28,16 +28,16 @@ func main() {
 		panic(err)
 	}
 
-	log.Printf("Cassini Config\n ---------\n %s\n ---------\n Port: %d\n URL: %s\n", config.Service.Name, config.Service.Port, config.Service.Url)
+	log.Printf("Cassini Config\n ---------\n %s\n ---------\nURL: %s\n", config.Service.Name, config.Service.Url)
 	log.Println("Tests:", config.Service.Tests)
 
 	ticker := ticker.BuildTicker(config)
 
 	exit := make(chan bool)
 
-	for {
+	go runner.Run(exit, ticker, config)
 
-		go runner.Run(exit, ticker, config)
+	for {
 	}
 
 }

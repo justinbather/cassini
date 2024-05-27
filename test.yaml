@@ -1,14 +1,13 @@
 service:
   name: "test service"
-  port: 8000
   url: "http://localhost:8000/"
   intervalUnit: "second"
   intervalAmount: 5
   tests:
     - name: "test1"
-      status: 200
+      assertStatus: 200
       method: "GET"
     - name: "testing post req"
-      status: 201
+      assertStatus: 201
       method: "POST"
 
